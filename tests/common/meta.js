@@ -18,15 +18,21 @@ module.exports = function(projectName)
 
             // Description
             browser.element('css selector', 'meta[name=description]', function(result) {
-                browser.elementIdAttribute(result.value.ELEMENT, 'content', function (result) {
-                    browser.verify.ok(result.value.trim().length !== 0, "Description is not empty");
-                });
+                if (typeof result.value.ELEMENT === "undefined")
+                    browser.verify.ok(false, "Description is defined");
+                else
+                    browser.elementIdAttribute(result.value.ELEMENT, 'content', function (result) {
+                        browser.verify.ok(result.value.trim().length !== 0, "Description is not empty");
+                    });
             });
 
             // Keywords
             browser.element('css selector', 'meta[name=keywords]', function(result) {
-                browser.elementIdAttribute(result.value.ELEMENT, 'content', function (result) {
-                    browser.verify.ok(result.value.trim().length !== 0, "Keywords is not empty");
+                if (typeof result.value.ELEMENT === "undefined")
+                    browser.verify.ok(false, "Keywords is defined");
+                else
+                    browser.elementIdAttribute(result.value.ELEMENT, 'content', function (result) {
+                        browser.verify.ok(result.value.trim().length !== 0, "Keywords is not empty");
                 });
             });
         };
