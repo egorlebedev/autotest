@@ -4,10 +4,19 @@ let fs = require("fs"),
     configs = [],
     normalizedPathConfigs = path.join(__dirname, "configs");
 
-fs.readdirSync(normalizedPathConfigs).forEach(function(file) {
-  configs.push(require("./configs/" + file));
-});
+let args = process.argv.slice(2);
 
+if (args.length > 0) {
+    fs.readdirSync(normalizedPathConfigs).forEach(function (file) {
+        let configFile = require("./configs/" + file);
+        if (configFile.projectName === args[0])
+            configs.push(require("./configs/" + file));
+    });
+} else {
+    fs.readdirSync(normalizedPathConfigs).forEach(function (file) {
+        configs.push(require("./configs/" + file));
+    });
+}
 
 configs.forEach(function(config){
   if (!config.disabled) {
