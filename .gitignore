@@ -1,0 +1,15 @@
+# common, PHPStorm
+.DS_Store
+.idea/*
+Thumbs.db
+
+# project
+configs/*
+!configs/_example.js
+node_modules
+reports
+sitemaps
+tests/*
+!tests/common
+!tests/PROJECT_NAME
+tests_output
