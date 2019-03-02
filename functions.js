@@ -1,6 +1,5 @@
 function getUrlsJson(projectName) {
-    let fs = require('fs'),
-        path = require("path"),
+    const fs = require('fs'),
         util = require("util"),
         xml2js = require('xml2js');
 

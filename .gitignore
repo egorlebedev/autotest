@@ -13,3 +13,4 @@ tests/*
 !tests/common
 !tests/PROJECT_NAME
 tests_output
+db/*

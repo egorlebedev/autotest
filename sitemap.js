@@ -1,10 +1,11 @@
-let fs = require("fs"),
+const fs = require("fs"),
     path = require("path"),
     functions = require(path.join(__dirname, '.', 'functions.js')),
-    configs = [],
     normalizedPathConfigs = path.join(__dirname, "configs");
 
-let args = process.argv.slice(2);
+let configs = [];
+
+const args = process.argv.slice(2);
 
 if (args.length > 0) {
     fs.readdirSync(normalizedPathConfigs).forEach(function (file) {

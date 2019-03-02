@@ -2,7 +2,7 @@ module.exports = function(projectName)
 {
     exportObject = [];
 
-    let urls = require('../../sitemaps/' + projectName + '.json');
+    const urls = require('../../sitemaps/' + projectName + '.json');
 
     urls.forEach(function (url) {
         exportObject["h1 test " + url] = function (browser) {
