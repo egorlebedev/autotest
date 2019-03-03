@@ -1,8 +1,9 @@
 module.exports = function(projectName)
 {
-    exportObject = [];
-
     const urls = require('../../sitemaps/' + projectName + '.json');
+    const TestsController = require('../../controllers/Tests.js');
+
+    exportObject = TestsController.getHooks(projectName, __filename);
 
     urls.forEach(function (url) {
         exportObject["h1 test " + url] = function (browser) {

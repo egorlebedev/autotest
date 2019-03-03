@@ -1,6 +1,6 @@
 const fs = require("fs"),
     path = require("path"),
-    functions = require(path.join(__dirname, '.', 'functions.js')),
+    Sitemap = require('./models/Sitemap.js');
     normalizedPathConfigs = path.join(__dirname, "configs");
 
 let configs = [];
@@ -31,7 +31,7 @@ configs.forEach(function(config){
     });
 
     generator.on('done', () => {
-        let res = functions.getUrlsJson(config.projectName);
+        let res = Sitemap.getUrlsJson(config.projectName);
         res.then(data => {
             fs.writeFile('./sitemaps/'+config.projectName+'.json', JSON.stringify(data), 'utf8', function() {});
         });

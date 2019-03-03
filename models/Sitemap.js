@@ -7,10 +7,10 @@ function getUrlsJson(projectName) {
     const xml2jsPromise = util.promisify(xml2js.parseString);
     const fsReadFilePromise = util.promisify(fs.readFile);
 
-    return fsReadFilePromise(__dirname + "/sitemaps/" + projectName + ".xml")
+    return fsReadFilePromise("./sitemaps/" + projectName + ".xml")
         .then(
             data => {
-              return xml2jsPromise(data);
+                return xml2jsPromise(data);
             }
         )
         .then(
@@ -31,31 +31,4 @@ function getUrlsJson(projectName) {
         );
 }
 
-function getConfigs(testName){
-    let fs = require("fs"),
-        path = require("path"),
-        normalizedPathConfigs = path.join(__dirname, "configs"),
-        configs = [],
-        configsFinal = [];
-
-    fs.readdirSync(normalizedPathConfigs).forEach(function(file) {
-        configs.push(require("./configs/" + file));
-        configs.forEach(function(config) {
-            if (!config.disabled && Object.keys(config.tests).indexOf(testName) >= 0) {
-                configsFinal.push(config);
-            }
-        });
-    });
-
-    return configsFinal;
-}
-
-function writeLog(msg, config){
-  let fs = require('fs');
-  fs.writeFile(__dirname + "/reports/"+config.projectName+".log", msg, function(err){});
-
-}
-
 exports.getUrlsJson = getUrlsJson;
-exports.getConfigs = getConfigs;
-exports.writeLog = writeLog;
