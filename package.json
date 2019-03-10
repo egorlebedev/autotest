@@ -1,16 +1,12 @@
 {
-  "name": "autotest",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
+  "name": "e2e-autotest",
+  "version": "0.1.0",
+  "homepage": "https://github.com/egorlebedev/autotest",
+  "description": "Autotest",
+  "author": "Egor Lebedev egorLebedevR@gmail.com",
   "license": "ISC",
   "dependencies": {
     "chromedriver": "^2.46.0",
-    "express": "^4.16.4",
     "nedb": "^1.8.0",
     "nightwatch": "^1.0.19",
     "nightwatch-html-reporter": "^2.0.6",
