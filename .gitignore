@@ -11,3 +11,4 @@ projects/*
 !projects/PROJECT_NAME
 tests_output
 db/*
+chromedriver.log
