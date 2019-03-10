@@ -1,22 +1,15 @@
 const fs = require("fs"),
     path = require("path"),
     Sitemap = require('./models/Sitemap.js');
-    normalizedPathConfigs = path.join(__dirname, "configs");
 
 let configs = [];
 
 const args = process.argv.slice(2);
 
 if (args.length > 0) {
-    fs.readdirSync(normalizedPathConfigs).forEach(function (file) {
-        let configFile = require("./configs/" + file);
-        if (configFile.projectName === args[0])
-            configs.push(require("./configs/" + file));
-    });
-} else {
-    fs.readdirSync(normalizedPathConfigs).forEach(function (file) {
-        configs.push(require("./configs/" + file));
-    });
+    const configPath = path.join(__dirname, "./projects/" + args[0] + "/config.js");
+    if (fs.existsSync(configPath))
+        configs.push(require(configPath));
 }
 
 configs.forEach(function(config){

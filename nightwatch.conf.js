@@ -23,7 +23,9 @@ module.exports = {
                 }
             }
         },
-        chrome: {            desiredCapabilities: {
+        chrome: {
+            skip_testcases_on_fail: false,
+            desiredCapabilities: {
                 browserName: 'chrome',
                     javascriptEnabled: true,
                     acceptSslCerts: true,
