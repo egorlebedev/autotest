@@ -1,4 +1,4 @@
 # autotest
 
 #### Start common test:
-`node nightwatch projects/PROJECT_NAME/tests/common.js`
+`node nightwatch projects/PROJECT_NAME/common/`
