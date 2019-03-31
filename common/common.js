@@ -1,11 +1,11 @@
 module.exports = function(projectName)
 {
-    const urls = require('../sitemaps/' + projectName + '.json');
-    const TestsController = require('../controllers/Tests.js');
+    const urls = require(global.coreRoot+'/sitemaps/' + projectName + '.json');
+    const TestsController = require(global.coreRoot+'/controllers/Tests.js');
     const fs = require("fs");
     const path = require("path");
     const srcPath = path.join(__dirname, "src");
-    const projectExtPath = path.join(__dirname, "../projects/" + projectName + "/common_ext");
+    const projectExtPath = path.join(global.coreRoot, "/projects/" + projectName + "/common_ext");
 
     let exportObject = TestsController.getHooks(projectName, __filename);
 
