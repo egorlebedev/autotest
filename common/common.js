@@ -1,6 +1,6 @@
 module.exports = function(projectName)
 {
-    const urls = require(global.coreRoot+'/sitemaps/' + projectName + '.json');
+    const urls = require(global.appRoot+'/sitemaps/' + projectName + '.json');
     const TestsController = require(global.coreRoot+'/controllers/Tests.js');
     const fs = require("fs");
     const path = require("path");
