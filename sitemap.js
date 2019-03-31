@@ -1,8 +1,9 @@
 const fs = require("fs"),
-    path = require("path"),
-    Sitemap = require(global.coreRoot+'/models/Sitemap.js');
+    path = require("path");
 
 require(path.join(__dirname, "/config.js"));
+
+const Sitemap = require(global.coreRoot+'/models/Sitemap.js');
 
 let configs = [];
 
