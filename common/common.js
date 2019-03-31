@@ -5,7 +5,7 @@ module.exports = function(projectName)
     const fs = require("fs");
     const path = require("path");
     const srcPath = path.join(__dirname, "src");
-    const projectExtPath = path.join(__dirname, "./projects/" + projectName + "/tests/common_ext");
+    const projectExtPath = path.join(__dirname, "../projects/" + projectName + "/common_ext");
 
     let exportObject = TestsController.getHooks(projectName, __filename);
 
