@@ -1,8 +1,8 @@
 # autotest
 
-#### Start common test:
-`node nightwatch projects/PROJECT_NAME/common/`
+#### Запуск основного теста:
+`node app projects/PROJECT_NAME/common/`
 
 
-#### Create sitemap
-`node sitemap.js PROJECT_NAME`
+#### Создание карты сайта
+`node sitemap PROJECT_NAME`
