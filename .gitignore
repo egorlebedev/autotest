@@ -5,7 +5,7 @@ Thumbs.db
 
 # project
 node_modules
-reports
+reports/*
 !reports/default
 sitemaps
 projects/*
