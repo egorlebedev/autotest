@@ -10,7 +10,7 @@ const reporter = new HtmlReporter({
     openBrowser: true,
     reportsDirectory: global.appRoot + '/reports/'+projectName,
     separateReportPerSuite: true,
-    customTheme: global.coreRoot+'/reports/default/index.pug'
+    customTheme: '/reports/default/index.pug'
 });
 
 module.exports = {
