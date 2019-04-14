@@ -1,11 +1,20 @@
 module.exports = function(projectName)
 {
-    const urls = require(global.appRoot+'/sitemaps/' + projectName + '.json');
+
+    const sitemapPath = global.appRoot+'/sitemaps/' + projectName + '.json';
     const TestsController = require(global.coreRoot+'/controllers/Tests.js');
     const fs = require("fs");
     const path = require("path");
     const srcPath = path.join(__dirname, "src");
     const projectExtPath = path.join(global.coreRoot, "/projects/" + projectName + "/common_ext");
+
+    let urls = [];
+    if (fs.existsSync(sitemapPath)) {
+        urls = require(sitemapPath);
+    } else {
+        console.error('Sitemap for '+projectName+" not found");
+        process.exit(1);
+    }
 
     let exportObject = TestsController.getHooks(projectName, __filename);
 

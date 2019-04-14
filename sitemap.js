@@ -13,6 +13,8 @@ if (args.length > 0) {
     const configPath = path.join(global.appRoot, "/projects/" + args[0] + "/config.js");
     if (fs.existsSync(configPath))
         configs.push(require(configPath));
+    else
+        console.log("Config for "+args[0]+" not found")
 }
 
 configs.forEach(function (config) {
