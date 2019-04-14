@@ -3,7 +3,7 @@ const fs = require("fs"),
 
 require(path.join(__dirname, "/config.js"));
 
-const Sitemap = require(global.coreRoot+'/models/Sitemap.js');
+const Sitemap = require(global.coreRoot + '/models/Sitemap.js');
 
 let configs = [];
 
@@ -15,26 +15,30 @@ if (args.length > 0) {
         configs.push(require(configPath));
 }
 
-configs.forEach(function(config){
-  if (!config.disabled) {
+configs.forEach(function (config) {
+    if (!config.disabled) {
 
-    const SitemapGenerator = require('sitemap-generator');
+        const SitemapGenerator = require('sitemap-generator');
 
-    // create generator
-    const generator = SitemapGenerator(config.url, {
-      stripQuerystring: false,
-      filepath: "./sitemaps/" + config.projectName + ".xml"
-    });
-
-    generator.on('done', () => {
-        let res = Sitemap.getUrlsJson(config.projectName);
-        res.then(data => {
-            fs.writeFile(global.appRoot+'/sitemaps/'+config.projectName+'.json', JSON.stringify(data), 'utf8', function() {});
+        // create generator
+        console.log("Start generate sitemap for "+config.projectName);
+        const generator = SitemapGenerator(config.url, {
+            stripQuerystring: false,
+            filepath: "./sitemaps/" + config.projectName + ".xml"
         });
-    });
 
-    // start the crawler
-    generator.start();
-  }
+        generator.on('done', () => {
+            let res = Sitemap.getUrlsJson(config.projectName);
+            res.then(data => {
+                fs.writeFileSync(global.appRoot + '/sitemaps/' + config.projectName + '.json', JSON.stringify(data), 'utf8', function () {
+                });
+                fs.unlinkSync(global.appRoot + '/sitemaps/' + config.projectName + '.xml');
+                console.log("Sitemap for "+config.projectName+ " generated");
+            });
+        });
+
+        // start the crawler
+        generator.start();
+    }
 
 });

@@ -1,5 +1,5 @@
-const Datastore = require('nedb')
-    , Test = new Datastore({ filename: './db/tests.db', autoload: true });
+const Datastore = require('nedb'),
+    Test = new Datastore({ filename: './db/tests.db', autoload: true });
 
 function insert(doc){
     return new Promise(function(resolve, reject) {
