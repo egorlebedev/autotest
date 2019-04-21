@@ -1,46 +1,62 @@
-const fs = require("fs"),
-    path = require("path");
-
-require(path.join(__dirname, "/config.js"));
-
-const Sitemap = require(global.coreRoot + '/models/Sitemap.js');
+const child_process = require('child_process'),
+    fs = require('fs'),
+    Queue = require('./models/Queue.js');
 
 let configs = [];
+let porjectsPromises = [];
+const QueueObj = new Queue();
 
-const args = process.argv.slice(2);
+fs.readdirSync("./projects").forEach(projectName => {
+    if (projectName !== "PROJECT_NAME") {
+        configs[projectName] = require('./projects/'+projectName+'/config.js');
+        QueueObj.findOne({'finished':false}).then(
+            data => {
+                if (data !== null)
+                    return 0;
 
-if (args.length > 0) {
-    const configPath = path.join(global.appRoot, "/projects/" + args[0] + "/config.js");
-    if (fs.existsSync(configPath))
-        configs.push(require(configPath));
-    else
-        console.log("Config for "+args[0]+" not found")
-}
+                porjectsPromises.push(
+                    new Promise((resolve, reject) => {
+                        QueueObj.findOne({"projectName": projectName}).then(
+                            data => {
 
-configs.forEach(function (config) {
-    if (!config.disabled) {
+                                if (configs[projectName].disabled === true)
+                                    return;
 
-        const SitemapGenerator = require('sitemap-generator');
+                                let frequency = ((configs[projectName].tests || {}).common || {}).frequency || 86400000;
 
-        // create generator
-        console.log("Start generate sitemap for "+config.projectName);
-        const generator = SitemapGenerator(config.url, {
-            stripQuerystring: false,
-            filepath: "./sitemaps/" + config.projectName + ".xml"
-        });
+                                if (data && data.dateFinish && (data.dateFinish + frequency > Date.now()))
+                                    return;
 
-        generator.on('done', () => {
-            let res = Sitemap.getUrlsJson(config.projectName);
-            res.then(data => {
-                fs.writeFileSync(global.appRoot + '/sitemaps/' + config.projectName + '.json', JSON.stringify(data), 'utf8', function () {
-                });
-                fs.unlinkSync(global.appRoot + '/sitemaps/' + config.projectName + '.xml');
-                console.log("Sitemap for "+config.projectName+ " generated");
-            });
-        });
+                                let sitemapPath = './sitemaps/' + projectName + '.json';
+                                let sitemap = false;
+                                let sitemapExpTime;
 
-        // start the crawler
-        generator.start();
+                                if (fs.existsSync(sitemapPath)){
+                                    sitemapExpTime = configs[projectName].sitemapExpTime || 86400000;
+                                    sitemap = fs.statSync(sitemapPath);
+                                }
+
+                                if (sitemap === false || sitemap.birthtimeMs + sitemapExpTime < Date.now()) {
+                                    try {
+                                        child_process.execSync('node sitemap ' + projectName);
+                                    } catch (err) {
+                                        ;
+                                    }
+                                }
+
+                                try {
+                                    child_process.execSync('node app projects/' + projectName + '/common');
+                                } catch (err) {
+                                    ;
+                                }
+                            }
+                        )
+                    })
+                );
+            }
+        );
     }
-
 });
+
+
+Promise.all(porjectsPromises);

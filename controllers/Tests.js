@@ -1,34 +1,43 @@
-const Tests = require('../models/Test.js');
+const Queue = require('../models/Queue.js');
 const path = require("path");
 
 function getHooks(projectName, testName){
     let newTest;
+    let QueueObj = new Queue();
     if (testName.indexOf(".js") !== undefined)
         testName = path.basename(testName).replace(".js", "");
 
     return {
         'before':function(browser, done) {
-            Tests.insert({
-                'projectName': projectName,
-                'testName': testName,
-                'dateStart': Date.now(),
-            }).then(
+
+            QueueObj.update(
+                {'projectName': projectName},
+                {$set: {
+                    'dateStart': Date.now(),
+                    'finished': false
+                }},
+                {upsert:true}
+            ).then(
                 data => {
                     newTest = data;
                     done();
+
                 }
             );
         },
         'after': function(browser, done) {
-            Tests.update(
-                {'_id': newTest._id},
-                {$set: {'dateFinish': Date.now()}}
+            QueueObj.update(
+                {'projectName': projectName},
+                {$set: {
+                    'dateFinish': Date.now(),
+                    'finished': true
+                }},
             ).then(
                 data => {
                     done();
                 }
             );
-        }
+        },
     };
 }
 
