@@ -1,7 +1,11 @@
 module.exports = {
-    "disabled": false,
-    "projectName": "GOOGLE",
-    "url": "https://google.com",
+    "disabled": false, // Флаг отключения тестирования.
+    "projectName": "GOOGLE", // Идентификатор проекта
+    "sitemapExpTime": 100000000000, // Время протухания карты сайта. По-умолчанию - 1 сутки.
+    "url": "https://google.com", // Урл проекта. Используется для формирования карты сайта.
     "tests": {
+        'common' : {
+            'frequency': 100000000 // Частота выполнения теста. По-умолчанию - 1 сутки.
+        }
     }
 };
