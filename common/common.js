@@ -2,7 +2,7 @@ module.exports = function(projectName)
 {
 
     const sitemapPath = global.appRoot+'/sitemaps/' + projectName + '.json';
-    const TestsController = require(global.coreRoot+'/controllers/Tests.js');
+    const TestModel = require(global.coreRoot+'/models/Test.js');
     const fs = require("fs");
     const path = require("path");
     const srcPath = path.join(__dirname, "src");
@@ -16,7 +16,7 @@ module.exports = function(projectName)
         process.exit(1);
     }
 
-    let exportObject = TestsController.getHooks(projectName, __filename);
+    let exportObject = TestModel.getHooks(projectName, __filename);
 
     let commonTests = fs.readdirSync(srcPath);
 

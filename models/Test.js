@@ -1,4 +1,4 @@
-const Queue = require('../models/Queue.js');
+const Queue = require('./Queue.js');
 const path = require("path");
 
 function getHooks(projectName, testName){
