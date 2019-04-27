@@ -45,7 +45,7 @@ fs.readdirSync("./projects").forEach(projectName => {
                                 }
 
                                 try {
-                                    child_process.execSync('node app projects/' + projectName + '/common');
+                                    child_process.execSync('node nightwatch_env/app projects/' + projectName + '/common --config nightwatch_env/nightwatch.conf.js');
                                 } catch (err) {
                                     ;
                                 }

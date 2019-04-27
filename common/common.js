@@ -1,6 +1,5 @@
 module.exports = function(projectName)
 {
-
     const sitemapPath = global.appRoot+'/sitemaps/' + projectName + '.json';
     const TestModel = require(global.coreRoot+'/models/Test.js');
     const fs = require("fs");

@@ -3,7 +3,7 @@ const chromedriver = require("chromedriver");
 
 module.exports = {
     src_folders : ['tests'],
-    globals_path: global.coreRoot+'/globals.js',
+    globals_path: global.coreRoot+'/nightwatch_env/globals.js',
     test_settings: {
         default: {
             launch_url: "http://localhost",
