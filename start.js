@@ -1,14 +1,13 @@
 const child_process = require('child_process'),
     fs = require('fs'),
     path = require("path");
-config = require(path.join(__dirname, "/config.js")),
+    config = require(path.join(__dirname, "/config.js")),
     Models = require(global.coreRoot+'/models/index')
 ;
 
 let QueueObj = new Models.Queue();
 
 QueueObj.hasUnfinished().then(data => {
-    console.log(data);
     if (data)
         return;
 
