@@ -1,55 +1,13 @@
 const fs = require("fs"),
     path = require("path"),
+    config = require(path.join(__dirname, "../config.js")),
     Models = require(global.coreRoot+'/models/index')
 ;
 
-
 module.exports = function(projectName)
 {
-    const sitemapPath = global.appRoot+'/sitemaps/' + projectName + '.json';
-    const srcPath = path.join(__dirname, "src");
-    const projectExtPath = path.join(global.coreRoot, "/projects/" + projectName + "/common_ext");
+    let TestObj = new Models.Test(projectName, __filename);
 
-    let urls = [];
-    if (fs.existsSync(sitemapPath)) {
-        urls = require(sitemapPath);
-    } else {
-        console.error('Sitemap for '+projectName+" not found");
-        process.exit(1);
-    }
-
-    let exportObject = Models.Test.getHooks(projectName, __filename);
-
-    let commonTests = fs.readdirSync(srcPath);
-
-    let projectExtTests = [];
-    if (fs.existsSync(projectExtPath))
-        projectExtTests = fs.readdirSync(projectExtPath);
-
-
-    urls.forEach(function (url) {
-
-        exportObject["Set Url " + url] = function (browser) {
-            browser
-                .url(url);
-        };
-
-        commonTests.forEach(function (test) {
-            let srcTest = require(srcPath + "/" +  test);
-            if (srcTest.disabled === false)
-                exportObject[srcTest.name + " " + url] = srcTest.fn;
-
-        });
-
-        projectExtTests.forEach(function (test) {
-            let srcTest = require(projectExtPath + "/" + test);
-            if (srcTest.disabled === false)
-                exportObject[srcTest.name + " " + url] = srcTest.fn;
-
-        });
-
-    });
-
-    return exportObject;
+    return TestObj.getExportObject();
 };
 

@@ -44,7 +44,7 @@ module.exports = class Sitemap {
             filepath: "./sitemaps/" + this.project + ".xml"
         });
         generator.on('done', () => {
-            this.getUrlsJson()
+            this.getJson()
                 .then(data => {
                     fs.writeFileSync(this.path, JSON.stringify(data), 'utf8', function () {
                     });
@@ -57,7 +57,16 @@ module.exports = class Sitemap {
         generator.start();
     }
 
-    getUrlsJson() {
+    getUrls(){
+        console.log(this.path);
+        if (!fs.existsSync(this.path))
+            throw new Error("Sitemap for " + this.project + " not exists");
+
+        return require(this.path);
+
+    }
+
+    getJson() {
         const util = require("util"),
             xml2js = require('xml2js');
 

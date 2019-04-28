@@ -7,7 +7,7 @@ const child_process = require('child_process'),
 
 let configs = [];
 let porjectsPromises = [];
-const QueueObj = new Models.Queue();
+let QueueObj = new Models.Queue();
 
 fs.readdirSync("./projects").forEach(project => {
     if (project !== "PROJECT_NAME") {
