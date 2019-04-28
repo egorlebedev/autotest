@@ -10,17 +10,13 @@ module.exports = class Sitemap {
 
     setConfig(){
         const configPath = path.join(global.appRoot, "/projects/" + this.project + "/config.js");
-        if (!fs.existsSync(configPath)) {
-            console.log("Config for " + this.project + " not found");
-            return;
-        }
+        if (!fs.existsSync(configPath))
+            throw new Error("Config for " + this.project + " not found");
 
         const config = require(configPath);
 
-        if (config.disabled) {
-            console.log("Tests for " + projectName + " disabled");
-            return;
-        }
+        if (config.disabled)
+            throw new Error("Tests for " + projectName + " disabled");
 
         this.config = config;
     }
@@ -52,8 +48,12 @@ module.exports = class Sitemap {
 
         const xml2jsPromise = util.promisify(xml2js.parseString);
         const fsReadFilePromise = util.promisify(fs.readFile);
+        const sitemapPath = "./sitemaps/" + this.project + ".xml";
 
-        return fsReadFilePromise("./sitemaps/" + this.project + ".xml")
+        if (!fs.existsSync(sitemapPath))
+            throw new Error("Sitemap xml for " + this.project + " not found");
+
+        return fsReadFilePromise(sitemapPath)
             .then(
                 data => {
                     return xml2jsPromise(data);
