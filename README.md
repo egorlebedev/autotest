@@ -11,7 +11,7 @@
 Карта сайта генерируется автоматически.
 
 #### Ручной запуск основного теста:
-`node app projects/PROJECT_NAME/common/`
+`node nightwatch_env/app projects/PROJECT_NAME/common --config nightwatch_env/nightwatch.conf.js`
 
 #### Ручной запуск создание карты сайта
 `node sitemap PROJECT_NAME`
