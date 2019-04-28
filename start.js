@@ -1,14 +1,17 @@
 const child_process = require('child_process'),
     fs = require('fs'),
-    Queue = require('./models/Queue.js');
+    path = require("path");
+    config = require(path.join(__dirname, "/config.js")),
+    Models = require(global.coreRoot+'/models/index')
+;
 
 let configs = [];
 let porjectsPromises = [];
-const QueueObj = new Queue();
+const QueueObj = new Models.Queue();
 
-fs.readdirSync("./projects").forEach(projectName => {
-    if (projectName !== "PROJECT_NAME") {
-        configs[projectName] = require('./projects/'+projectName+'/config.js');
+fs.readdirSync("./projects").forEach(project => {
+    if (project !== "PROJECT_NAME") {
+        configs[project] = require('./projects/'+project+'/config.js');
         QueueObj.findOne({'finished':false}).then(
             data => {
                 if (data !== null)
@@ -16,36 +19,28 @@ fs.readdirSync("./projects").forEach(projectName => {
 
                 porjectsPromises.push(
                     new Promise((resolve, reject) => {
-                        QueueObj.findOne({"projectName": projectName}).then(
+                        QueueObj.findOne({"project": project}).then(
                             data => {
 
-                                if (configs[projectName].disabled === true)
+                                if (configs[project].disabled === true)
                                     return;
 
-                                let frequency = ((configs[projectName].tests || {}).common || {}).frequency || 86400000;
+                                let frequency = ((configs[project].tests || {}).common || {}).frequency || 86400000;
 
                                 if (data && data.dateFinish && (data.dateFinish + frequency > Date.now()))
                                     return;
 
-                                let sitemapPath = './sitemaps/' + projectName + '.json';
-                                let sitemap = false;
-                                let sitemapExpTime;
-
-                                if (fs.existsSync(sitemapPath)){
-                                    sitemapExpTime = configs[projectName].sitemapExpTime || 86400000;
-                                    sitemap = fs.statSync(sitemapPath);
-                                }
-
-                                if (sitemap === false || sitemap.birthtimeMs + sitemapExpTime < Date.now()) {
+                                let SitemapObj = new Models.Sitemap(project);
+                                if (!SitemapObj.isActual()){
                                     try {
-                                        child_process.execSync('node sitemap ' + projectName);
+                                        child_process.execSync('node sitemap ' + project);
                                     } catch (err) {
                                         ;
                                     }
                                 }
 
                                 try {
-                                    child_process.execSync('node nightwatch_env/app projects/' + projectName + '/common --config nightwatch_env/nightwatch.conf.js');
+                                    child_process.execSync('node nightwatch_env/app projects/' + project + '/common --config nightwatch_env/nightwatch.conf.js');
                                 } catch (err) {
                                     ;
                                 }

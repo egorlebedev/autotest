@@ -5,7 +5,22 @@ module.exports = class Sitemap {
 
     constructor(project){
         this.project = project;
+        this.path = global.appRoot + '/sitemaps/' + this.project + '.json';
         this.setConfig();
+    }
+
+    isActual(){
+        if (fs.existsSync(this.path)){
+            let sitemapExpTime = this.config.sitemapExpTime || 86400000;
+            let sitemapStat = fs.statSync(this.path);
+
+            if (sitemapStat.birthtimeMs + sitemapExpTime < Date.now())
+                return false;
+
+            return true;
+        }
+
+        return false
     }
 
     setConfig(){
@@ -23,18 +38,18 @@ module.exports = class Sitemap {
 
     generate() {
         const SitemapGenerator = require('sitemap-generator');
-        console.log("Start generate sitemap for "+this.config.projectName);
+        console.log("Start generate sitemap for "+this.project);
         let generator = SitemapGenerator(this.config.url, {
             stripQuerystring: false,
-            filepath: "./sitemaps/" + this.config.projectName + ".xml"
+            filepath: "./sitemaps/" + this.project + ".xml"
         });
         generator.on('done', () => {
             this.getUrlsJson()
                 .then(data => {
-                    fs.writeFileSync(global.appRoot + '/sitemaps/' + this.config.projectName + '.json', JSON.stringify(data), 'utf8', function () {
+                    fs.writeFileSync(this.path, JSON.stringify(data), 'utf8', function () {
                     });
-                    fs.unlinkSync(global.appRoot + '/sitemaps/' + this.config.projectName + '.xml');
-                    console.log("Sitemap for "+this.config.projectName+ " generated");
+                    fs.unlinkSync(global.appRoot + '/sitemaps/' + this.project + '.xml');
+                    console.log("Sitemap for "+this.project+ " generated");
                 });
         });
 
