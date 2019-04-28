@@ -58,7 +58,6 @@ module.exports = class Sitemap {
     }
 
     getUrls(){
-        console.log(this.path);
         if (!fs.existsSync(this.path))
             throw new Error("Sitemap for " + this.project + " not exists");
 

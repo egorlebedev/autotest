@@ -11,6 +11,37 @@ module.exports = class Test {
         this.test = test;
         if (this.test.indexOf(".js") !== undefined)
             this.test = path.basename(this.test).replace(".js", "");
+
+        this.setConfig();
+    }
+
+    isDisabled(){
+        return this.config.disabled === true;
+    }
+
+    getFrequency(){
+        if (this.test === "common")
+            return ((this.config.tests || {}).common || {}).frequency || 86400000;
+
+        return 86400000;
+    }
+
+    isActual(){
+        const Models = require(global.coreRoot+'/models/index');
+        let QueueObj = new Models.Queue();
+        return QueueObj.findOne({"project": "FRC"}).then(data => {
+            let frequency = this.getFrequency();
+            return !(data && data.dateFinish && (data.dateFinish + frequency > Date.now()))
+        });
+
+    }
+
+    setConfig(){
+        const configPath = path.join(global.appRoot, "/projects/" + this.project + "/config.js");
+        if (!fs.existsSync(configPath))
+            throw new Error("Config for " + this.project + " not found");
+
+        this.config = require(configPath);
     }
 
     getExportObject() {
@@ -57,11 +88,12 @@ module.exports = class Test {
         let newTest;
         let QueueObj = new Models.Queue();
 
+        let project = this.project;
+
         return {
             'before': function (browser, done) {
-
                 QueueObj.update(
-                    {'projectName': this.project},
+                    {'project': project},
                     {
                         $set: {
                             'dateStart': Date.now(),
@@ -79,7 +111,7 @@ module.exports = class Test {
             },
             'after': function (browser, done) {
                 QueueObj.update(
-                    {'projectName': this.project},
+                    {'project': project},
                     {
                         $set: {
                             'dateFinish': Date.now(),

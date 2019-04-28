@@ -6,4 +6,9 @@ module.exports = class Queue extends DB{
         super('./db/queue.db');
     }
 
+
+    hasUnfinished(){
+        return this.findOne({'finished':false});
+    }
+
 };
