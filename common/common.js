@@ -1,9 +1,12 @@
+const fs = require("fs"),
+    path = require("path"),
+    Models = require(global.coreRoot+'/models/index')
+;
+
+
 module.exports = function(projectName)
 {
     const sitemapPath = global.appRoot+'/sitemaps/' + projectName + '.json';
-    const TestModel = require(global.coreRoot+'/models/Test.js');
-    const fs = require("fs");
-    const path = require("path");
     const srcPath = path.join(__dirname, "src");
     const projectExtPath = path.join(global.coreRoot, "/projects/" + projectName + "/common_ext");
 
@@ -15,7 +18,7 @@ module.exports = function(projectName)
         process.exit(1);
     }
 
-    let exportObject = TestModel.getHooks(projectName, __filename);
+    let exportObject = Models.Test.getHooks(projectName, __filename);
 
     let commonTests = fs.readdirSync(srcPath);
 

@@ -2,7 +2,7 @@ const chromedriver = require("chromedriver");
 
 
 module.exports = {
-    src_folders : ['tests'],
+    //src_folders : ['tests'],
     globals_path: global.coreRoot+'/nightwatch_env/globals.js',
     test_settings: {
         default: {

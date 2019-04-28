@@ -11,6 +11,7 @@
     "nightwatch": "^1.0.19",
     "nightwatch-html-reporter": "^2.0.6",
     "request": "^2.88.0",
+    "require-directory": "^2.1.1",
     "sitemap-generator": "^8.3.3",
     "xml2js": "^0.4.19"
   }
